@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 
 export const EventExample: FC = () => {
 	//Состояние инпута
@@ -6,6 +6,8 @@ export const EventExample: FC = () => {
 
 	//true если занесли в квадрат и false, если за его пределами
 	const [isDrag, setIsDrag] = useState<boolean>(false);
+
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
 		/* HTMLInputElement это дженерик-тип, позволяющий отслеживать 
@@ -18,7 +20,9 @@ export const EventExample: FC = () => {
 		/* HTMLButtonElement это дженерик-тип, позволяющий отслеживать 
 		событие только у кнопки
 		*/
-		console.log(value);
+
+		// console.log(value); //Значение из управляемого инпута
+		console.log(inputRef.current?.value); //Значение из неуправляемого инпута
 	};
 
 	const dragHandler = (e: React.DragEvent<HTMLDivElement>) => {
@@ -44,7 +48,8 @@ export const EventExample: FC = () => {
 
 	return (
 		<div>
-			<input type="text" value={value} onChange={changeHandler} />
+			<input type="text" value={value} onChange={changeHandler} placeholder="Управляемый" />
+			<input type="text" placeholder="Неуправляемый" ref={inputRef} />
 			<button onClick={clickHandler}>Click me</button>
 			<div
 				draggable
