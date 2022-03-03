@@ -1,68 +1,43 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
 import { Card, CardVariant } from './components/Card';
 import { EventExample } from './components/EventExample';
-import List from './components/List';
-import { TodoItem } from './components/TodoItem';
-import { UserItem } from './components/UserItem';
-import { UserList } from './components/UserList';
-import { IToDo, IUser } from './types/types';
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { UsersPage } from './components/UsersPage';
+import { TodosPage } from './components/TodosPage';
+import { UserItemPage } from './components/UserItemPage';
+import { TodoItemPage } from './components/TodoItemPage';
 
-function App() {
-
-	const [users, setUsers] = useState<IUser[]>([]);//Массив пользователей
-	const [todos, setTodos] = useState<IToDo[]>([]);	//Список дел
-
-	//Получаем пользователей
-	const fetchUsers = async () => {
-		try {
-
-			const response = await axios.get<IUser[]>("https://jsonplaceholder.typicode.com/users");
-			setUsers(response.data);
-		} catch (e) {
-			console.log(e);
-		}
-	};
-
-	//Получаем список дел
-	const fetchTodos = async () => {
-		try {
-
-			const response = await axios.get<IToDo[]>("https://jsonplaceholder.typicode.com/todos?_limit=10");
-			setTodos(response.data);
-		} catch (e) {
-			console.log(e);
-		}
-	};
-
-	useEffect(() => {
-		fetchUsers();
-		fetchTodos();
-
-	}, []);
+export const App = () => {
 
 	return (
-		<div>
-			<EventExample />
-			<Card
-				height='200px'
-				width='200px'
-				variant={CardVariant.outlined}
-				onClick={(num: number) => console.log("Button was clicked!", num)}
-			>
-				<button>Button</button>
-			</Card>
-			{/* <UserList users={users} /> */}
-			<List
-				items={users}
-				renderItem={(user: IUser) => <UserItem user={user} key={user.id} />}
-			/>
-			<List
-				items={todos}
-				renderItem={(todo: IToDo) => <TodoItem todo={todo} key={todo.id} />}
-			/>
-		</div>
+		// <div>
+		// 	<EventExample />
+		// 	<Card
+		// 		height='200px'
+		// 		width='200px'
+		// 		variant={CardVariant.outlined}
+		// 		onClick={(num: number) => console.log("Button was clicked!", num)}
+		// 	>
+		// 		<button>Button</button>
+		// 	</Card>
+		// </div>
+		<BrowserRouter>
+			<div>
+				<div
+					style={{ margin: "10px 0 auto 10px", display: "flex", flexDirection: "column" }}>
+					<Link to="/users">Пользователи</Link>
+					<Link to="/todos">Список дел</Link>
+				</div>
+				<Routes>
+					<Route path="/users" element={<UsersPage />} />
+
+					<Route path="/todos" element={<TodosPage />} />
+					<Route path="/users/:id" element={<UserItemPage />} />
+					<Route path="/todos/:id" element={<TodoItemPage />} />
+				</Routes>
+			</div>
+		</BrowserRouter>
 	);
 }
 

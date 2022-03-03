@@ -7,6 +7,8 @@ interface UserListProps {
 	users: IUser[]; //Массив типа IUser
 }
 
+// todo Неиспользуемый компонент
+
 export const UserList: FC<UserListProps> = ({ users }) => {
 
 	return (
@@ -14,7 +16,7 @@ export const UserList: FC<UserListProps> = ({ users }) => {
 			{
 				users.map((user) => {
 					return (
-						<UserItem user={user} key={user.id} />
+						<UserItem onClick={(user: IUser) => console.log("UserList")} user={user} key={user.id} />
 					);
 
 				})
